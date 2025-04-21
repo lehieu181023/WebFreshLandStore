@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{img/logo.png}">
+    <title>Freshland - Cửa hàng tạp hóa</title>
+    <link rel="stylesheet" th:href="@{css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Import fragment header từ file header.html trong thư mục fragments -->
+<div th:replace="fragments/header :: header"></div>
+
+    <main>
+        <section class="dashboard">
+            <h2>Bảng điều khiển</h2>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <i class="fas fa-box"></i>
+                    <div class="stat-info">
+                        <h3>Tổng sản phẩm</h3>
+                        <p id="productCount">150</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="stat-info">
+                        <h3>Đơn hàng hôm nay</h3>
+                        <p id="todayOrders">24</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <div class="stat-info">
+                        <h3>Doanh thu hôm nay</h3>
+                        <p id="todayRevenue">5.280.000 ₫</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-info">
+                        <h3>Sắp hết hàng</h3>
+                        <p id="lowStock">12</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-section">
+            <div class="recent-orders">
+                <h2>Đơn hàng gần đây</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD001</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>16/04/2025</td>
+                            <td>450.000 ₫</td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD002</td>
+                            <td>Trần Thị B</td>
+                            <td>16/04/2025</td>
+                            <td>320.000 ₫</td>
+                            <td><span class="status pending">Đang xử lý</span></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD003</td>
+                            <td>Lê Văn C</td>
+                            <td>15/04/2025</td>
+                            <td>780.000 ₫</td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD004</td>
+                            <td>Phạm Thị D</td>
+                            <td>15/04/2025</td>
+                            <td>210.000 ₫</td>
+                            <td><span class="status cancelled">Đã hủy</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="orders.html" class="view-all">Xem tất cả đơn hàng</a>
+            </div>
+
+            <div class="top-products">
+                <h2>Sản phẩm bán chạy</h2>
+                <ul>
+                    <li>
+                        <div class="product-info">
+                            <img src="/api/placeholder/50/50" alt="Sản phẩm 1">
+                            <div>
+                                <h4>Sữa tươi Vinamilk</h4>
+                                <p>Đã bán: 45 sản phẩm</p>
+                            </div>
+                        </div>
+                        <span>12.000 ₫</span>
+                    </li>
+                    <li>
+                        <div class="product-info">
+                            <img src="/api/placeholder/50/50" alt="Sản phẩm 2">
+                            <div>
+                                <h4>Mì Hảo Hảo tôm chua cay</h4>
+                                <p>Đã bán: 38 sản phẩm</p>
+                            </div>
+                        </div>
+                        <span>3.500 ₫</span>
+                    </li>
+                    <li>
+                        <div class="product-info">
+                            <img src="/api/placeholder/50/50" alt="Sản phẩm 3">
+                            <div>
+                                <h4>Nước giặt Omo</h4>
+                                <p>Đã bán: 32 sản phẩm</p>
+                            </div>
+                        </div>
+                        <span>75.000 ₫</span>
+                    </li>
+                    <li>
+                        <div class="product-info">
+                            <img src="/api/placeholder/50/50" alt="Sản phẩm 4">
+                            <div>
+                                <h4>Dầu ăn Neptune</h4>
+                                <p>Đã bán: 29 sản phẩm</p>
+                            </div>
+                        </div>
+                        <span>45.000 ₫</span>
+                    </li>
+                </ul>
+                <a href="products.html" class="view-all">Xem tất cả sản phẩm</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Freshland. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
+    <title>Quản lý đơn hàng - Freshland</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Import fragment header từ file header.html trong thư mục fragments -->
+<div th:replace="fragments/header :: header"></div>
+
+    <main>
+        <!-- Modal tạo đơn hàng mới -->
+        <div id="newOrderModal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Tạo người dùng mới</h2>
+                
+                <form id="newOrderForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCustomerName">Tên khách hàng:</label>
+                            <input type="text" id="newCustomerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCustomerPhone">Email:</label>
+                            <input type="tel" id="newCustomerPhone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCustomerName">Số điện thoại:</label>
+                            <input type="text" id="newCustomerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCustomerPhone">Giới tính:</label>
+                            <select id="statusFilter">
+                                <option value="">Giới tính</option>
+                                <option value="pending">Nam</option>
+                                <option value="completed">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCustomerPhone">Trạng thái:</label>
+                            <select id="statusFilter">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="pending">Đoạt động</option>
+                                <option value="completed">Không hoạt động</option>
+                            </select>
+                        </div>      
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary-btn" id="cancelNewOrderBtn">Hủy bỏ</button>
+                        <button type="submit" class="btn primary-btn">Tạo người dùng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

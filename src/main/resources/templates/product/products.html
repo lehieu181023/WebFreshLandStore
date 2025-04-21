@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm - Freshland</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+<body>
+    <!-- Import fragment header từ file header.html trong thư mục fragments -->
+    <div th:replace="fragments/header :: header"></div>
+    <main>
+        <section class="product-management">
+            <div class="section-header">
+                <h2>Quản lý sản phẩm</h2>
+                <a type="button" th:href="@{/product/update}" id="addProductBtn" class="btn primary-btn">
+                    <i class="fas fa-plus"></i> Thêm sản phẩm
+                </a>
+            </div>
+
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="searchProduct" placeholder="Tìm kiếm sản phẩm...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-container">
+                    <select id="categoryFilter">
+                        <option value="">Tất cả danh mục</option>
+                        <option th:each="itemc:${category}" th:value="${itemc.name}" th:text="${itemc.name}"></option>
+                    </select>
+                    <select id="stockFilter">
+                        <option value="">Tình trạng kho</option>
+                        <option value="instock">Còn hàng</option>
+                        <option value="lowstock">Sắp hết</option>
+                        <option value="outofstock">Hết hàng</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-list">
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá bán</th>
+                            <th>Tồn kho</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <tr th:each="item:${product}">
+                            <td th:text="${item.id}"></td>
+                            <td><img th:src="${item.imageUrl}" alt="Sữa tươi"></td>
+                            <td th:text="${item.name}"></td>
+                            <td th:text="${item.category.name}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                            <td th:text="${item.quantity}"></td>
+                            <td th:switch="${item.status}">
+                                <span class="status completed" th:case="'In stock'">Còn hàng</span>
+                                <span class="status pending" th:case="'Out of stock'">Sắp hết</span>
+                                <span class="status cancelled" th:case="'Low stock'">Hết hàng</span>
+                            </td>
+                            <td class="actions">
+                                <a type="button" th:href="@{/product/update/{id}(id=${item.id})}" class="btn edit-btn"><i class="fas fa-edit"></i></a>
+                                <a type="button" th:href="@{/product/delete/{id}(id=${item.id})}" class="btn delete-btn"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+<!--            <div class="pagination">-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-left"></i></button>-->
+<!--                <button class="btn page-btn active">1</button>-->
+<!--                <button class="btn page-btn">2</button>-->
+<!--                <button class="btn page-btn">3</button>-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-right"></i></button>-->
+<!--            </div>-->
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Freshland. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#myTable').DataTable({
+            "paging": true,          // Bật phân trang
+            "searching": false,
+            "pageLength": 5,         // Số dòng mỗi trang
+            "lengthMenu": [5, 10, 25, 50, 100], // Các tùy chọn số dòng
+            "language": {
+              "lengthMenu": "Hiển thị _MENU_ dòng mỗi trang",
+              "zeroRecords": "Không tìm thấy dữ liệu",
+              "info": "Trang _PAGE_ trên _PAGES_",
+              "infoEmpty": "Không có dữ liệu",
+              "infoFiltered": "(lọc từ _MAX_ tổng số dòng)",
+              "search": "Tìm kiếm:",
+              "paginate": {
+                "first": "Đầu",
+                "last": "Cuối",
+                "next": ">",
+                "previous": "<"
+              }
+            }
+          });
+        });
+
+    </script>
+    <style>
+        .dataTables_wrapper .dataTables_paginate {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin-top: 20px;
+          gap: 5px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+          background-color: var(--white);
+          color: var(--text-color);
+          padding: 6px 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+          background-color: var(--primary-color);
+          color: var(--white) !important;
+          border-color: var(--primary-color);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) {
+          background-color: #f1f2f6;
+        }
+
+        .dataTables_length{
+            margin-bottom: 10px;
+        }
+    </style>
+</body>
+</html>

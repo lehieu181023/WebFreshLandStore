@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{img/logo.png}">
+    <title>Quản lý đơn hàng - Freshland</title>
+    <link rel="stylesheet" th:href="@{css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Import fragment header từ file header.html trong thư mục fragments -->
+<div th:replace="fragments/header :: header"></div>
+
+    <main>
+        <section class="order-management">
+            <div class="section-header">
+                <h2>Quản lý đơn hàng</h2>
+            </div>
+
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="searchOrder" placeholder="Tìm kiếm đơn hàng...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-container">
+                    <select id="statusFilter">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="pending">Đang xử lý</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                    <div class="date-range">
+                        <label for="startDate">Từ:</label>
+                        <input type="date" id="startDate">
+                        <label for="endDate">Đến:</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày đặt</th>
+                            <th>Số lượng SP</th>
+                            <th>Tổng tiền</th>
+                            <th>Thanh toán</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                        <tr>
+                            <td>#ORD001</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>16/04/2025</td>
+                            <td>5</td>
+                            <td>450.000 ₫</td>
+                            <td>Tiền mặt</td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                            <td class="actions">
+                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn print-btn"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD002</td>
+                            <td>Trần Thị B</td>
+                            <td>16/04/2025</td>
+                            <td>3</td>
+                            <td>320.000 ₫</td>
+                            <td>Chuyển khoản</td>
+                            <td><span class="status pending">Đang xử lý</span></td>
+                            <td class="actions">
+                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn print-btn"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD003</td>
+                            <td>Lê Văn C</td>
+                            <td>15/04/2025</td>
+                            <td>8</td>
+                            <td>780.000 ₫</td>
+                            <td>Tiền mặt</td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                            <td class="actions">
+                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn print-btn"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD004</td>
+                            <td>Phạm Thị D</td>
+                            <td>15/04/2025</td>
+                            <td>2</td>
+                            <td>210.000 ₫</td>
+                            <td>Tiền mặt</td>
+                            <td><span class="status cancelled">Đã hủy</span></td>
+                            <td class="actions">
+                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn print-btn"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD005</td>
+                            <td>Võ Thị E</td>
+                            <td>14/04/2025</td>
+                            <td>6</td>
+                            <td>520.000 ₫</td>
+                            <td>Chuyển khoản</td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                            <td class="actions">
+                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn print-btn"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="btn page-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="btn page-btn active">1</button>
+                <button class="btn page-btn">2</button>
+                <button class="btn page-btn">3</button>
+                <button class="btn page-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Modal chi tiết đơn hàng -->
+        <div id="orderModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Chi tiết đơn hàng <span id="orderNumber">#ORD001</span></h2>
+                
+                <div class="order-info">
+                    <div class="info-row">
+                        <div class="info-group">
+                            <label>Khách hàng:</label>
+                            <span id="customerName">Nguyễn Văn A</span>
+                        </div>
+                        <div class="info-group">
+                            <label>Điện thoại:</label>
+                            <span id="customerPhone">0912345678</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-group">
+                            <label>Ngày đặt:</label>
+                            <span id="orderDate">16/04/2025</span>
+                        </div>
+                        <div class="info-group">
+                            <label>Nhân viên:</label>
+                            <span id="staffName">Hoàng Văn F</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-group wide">
+                            <label>Địa chỉ:</label>
+                            <span id="customerAddress">123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Danh sách sản phẩm</h3>
+                <table class="order-items">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã SP</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderItemsBody">
+                        <tr>
+                            <td>1</td>
+                            <td>SP001</td>
+                            <td>Sữa tươi Vinamilk 180ml</td>
+                            <td>10</td>
+                            <td>12.000 ₫</td>
+                            <td>120.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>SP002</td>
+                            <td>Mì Hảo Hảo tôm chua cay</td>
+                            <td>20</td>
+                            <td>3.500 ₫</td>
+                            <td>70.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>SP004</td>
+                            <td>Dầu ăn Neptune 1L</td>
+                            <td>2</td>
+                            <td>45.000 ₫</td>
+                            <td>90.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>SP007</td>
+                            <td>Gạo Ngọc Đỏ 5kg</td>
+                            <td>1</td>
+                            <td>120.000 ₫</td>
+                            <td>120.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>SP010</td>
+                            <td>Nước rửa chén Sunlight 400g</td>
+                            <td>1</td>
+                            <td>50.000 ₫</td>
+                            <td>50.000 ₫</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Tổng tiền hàng:</strong></td>
+                            <td>450.000 ₫</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Giảm giá:</strong></td>
+                            <td>0 ₫</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Tổng thanh toán:</strong></td>
+                            <td>450.000 ₫</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="order-actions">
+                    <div class="status-update">
+                        <label for="orderStatus">Cập nhật trạng thái:</label>
+                        <select id="orderStatus">
+                            <option value="pending">Đang xử lý</option>
+                            <option value="completed" selected>Hoàn thành</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn secondary-btn" id="printOrderBtn"><i class="fas fa-print"></i> In hóa đơn</button>
+                        <button class="btn primary-btn" id="saveOrderBtn">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Freshland. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="js/listorders.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
