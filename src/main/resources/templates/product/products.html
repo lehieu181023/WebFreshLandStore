@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Import fragment header từ file header.html trong thư mục fragments -->
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <main>
         <section class="product-management">
             <div class="section-header">
@@ -34,9 +34,9 @@
                     </select>
                     <select id="stockFilter">
                         <option value="">Tình trạng kho</option>
-                        <option value="instock">Còn hàng</option>
-                        <option value="lowstock">Sắp hết</option>
-                        <option value="outofstock">Hết hàng</option>
+                        <option value="Còn hàng">Còn hàng</option>
+                        <option value="Sắp hết">Sắp hết</option>
+                        <option value="Hết hàng">Hết hàng</option>
                     </select>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <table id="myTable">
                     <thead>
                         <tr>
-                            <th>Mã SP</th>
+                            <th>STT</th>
                             <th>Hình ảnh</th>
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
@@ -56,9 +56,9 @@
                         </tr>
                     </thead>
                     <tbody id="productTableBody">
-                        <tr th:each="item:${product}">
-                            <td th:text="${item.id}"></td>
-                            <td><img th:src="${item.imageUrl}" alt="Sữa tươi"></td>
+                        <tr th:each="item,itemcount:${product}">
+                            <td th:text="${itemcount.count}"></td>
+                            <td><img th:src="${item.imageUrl}" th:alt="${item.name}" style="height: 50px;"></td>
                             <td th:text="${item.name}"></td>
                             <td th:text="${item.category.name}"></td>
                             <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
@@ -70,7 +70,7 @@
                             </td>
                             <td class="actions">
                                 <a type="button" th:href="@{/product/update/{id}(id=${item.id})}" class="btn edit-btn"><i class="fas fa-edit"></i></a>
-                                <a type="button" th:href="@{/product/delete/{id}(id=${item.id})}" class="btn delete-btn"><i class="fas fa-trash"></i></a>
+                                <a type="button" th:href="@{/product/delete/{id}(id=${item.id})}" class="btn delete-btn"  onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
 

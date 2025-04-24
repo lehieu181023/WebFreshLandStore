@@ -17,48 +17,41 @@
         <div id="productModal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2 id="modalTitle" th:unless="${id > 0}">Thêm sản phẩm mới</h2>
-                <h2 id="modalTitle" th:if="${id > 0}">Sửa sản phẩm</h2>
-                <form id="productForm">
-                    <div class="form-group">
+                <h2 id="modalTitle" th:text="${product.id != null} ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'"></h2>
+                <form id="productForm" th:action="@{/SaveProduct}" th:object="${product}" method="post" enctype="multipart/form-data">
+                    <div class="form-group" hidden="hidden">
                         <label for="productCode">Mã sản phẩm:</label>
-                        <input type="text" id="productCode" required>
+                        <input type="text" id="productCode" th:field="*{id}">
                     </div>
                     <div class="form-group">
                         <label for="productName">Tên sản phẩm:</label>
-                        <input type="text" id="productName" required>
+                        <input type="text" id="productName" th:field="*{name}" required>
                     </div>
                     <div class="form-group">
                         <label for="productCategory">Danh mục:</label>
-                        <select id="productCategory" required>
-                            <option value="food">Thực phẩm</option>
-                            <option value="drinks">Đồ uống</option>
-                            <option value="household">Đồ gia dụng</option>
-                            <option value="personal">Chăm sóc cá nhân</option>
+                        <select id="productCategory" th:field="*{categoryId}" required>
+                            <option value="">Chọn danh mục</option>
+                            <option th:each="cate:${category}" th:value="${cate.id}" th:text="${cate.name}"></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="productPrice">Giá bán:</label>
-                        <input type="number" id="productPrice" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productCost">Giá nhập:</label>
-                        <input type="number" id="productCost" min="0" required>
+                        <input type="number" id="productPrice" min="0" th:field="*{price}" required>
                     </div>
                     <div class="form-group">
                         <label for="productStock">Số lượng tồn:</label>
-                        <input type="number" id="productStock" min="0" required>
+                        <input type="number" id="productStock" min="0" th:field="*{quantity}" required>
                     </div>
                     <div class="form-group">
                         <label for="productImage">Hình ảnh:</label>
-                        <input type="file" id="productImage">
-                    </div>
-                    <div class="form-group">
-                        <label for="productDescription">Mô tả:</label>
-                        <textarea id="productDescription" rows="3"></textarea>
+                        <input type="file" id="productImage" name="imageFile">
+                        <div th:if="*{imageUrl} != null">
+                            <p>Hình hiện tại:</p>
+                            <img th:src="@{${product.imageUrl}}" width="100" />
+                        </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn secondary-btn" id="cancelBtn">Hủy bỏ</button>
+                        <a type="button" class="btn secondary-btn" th:href="@{/product}">Hủy bỏ</a>
                         <button type="submit" class="btn primary-btn">Lưu sản phẩm</button>
                     </div>
                 </form>

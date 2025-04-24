@@ -4,33 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" th:href="@{img/logo.png}">
-    <title>Quản lý đơn hàng - Freshland</title>
+    <title>Quản lý tài khoản - Freshland</title>
     <link rel="stylesheet" th:href="@{css/styles.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 </head>
 <body>
 <!-- Import fragment header từ file header.html trong thư mục fragments -->
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
     <main>
         <section class="order-management">
             <div class="section-header">
                 <h2>Quản lý người dùng</h2>
-                <button id="addOrderBtn" class="btn primary-btn">
+                <a th:href="@{/user/create}" id="addOrderBtn" class="btn primary-btn">
                     <i class="fas fa-plus"></i> Tạo người dùng mới
-                </button>
+                </a>
             </div>
 
             <div class="filters">
                 <div class="search-box">
-                    <input type="text" id="searchOrder" placeholder="Tìm kiếm người dùng...">
+                    <input type="text" id="searchUser" placeholder="Tìm kiếm người dùng...">
                     <button class="search-btn"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="filter-container">
                     <select id="statusFilter">
                         <option value="">Tất cả trạng thái</option>
-                        <option value="pending">Đoạt động</option>
-                        <option value="completed">Không hoạt động</option>
+                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Khóa">Khóa</option>
 
                     </select>
 
@@ -38,275 +40,49 @@
             </div>
 
             <div class="order-list">
-                <table>
+                <table id="myTable">
                     <thead>
                         <tr>
-                            <th>Id người dùng</th>
+                            <th>STT</th>
+                            <th>Tài khoản</th>
                             <th>Họ và tên</th>
                             <th>Email</th>
                             <th>Số điện thoại</th>
-                            <th>Giới tính</th>
-                            <th>Ngày tạo</th>
+                            <th>Quyền</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody id="orderTableBody">
-                        <tr>
-                            <td>1</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>nguyena@gmail.com</td>
-                            <td>0987654321</td>
-                            <td>Nam</td>
-                            <td>16/04/2025</td>
-                            <td><span class="status completed">Hoạt động</span></td>
-                            <td class="actions">
-                                <button class="btn view-btn"><i class="fas fa-eye"></i></button>
-                                <button class="btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    <tbody id="UserTableBody">
+                        <tr th:each="item,itemcount:${user}">
+                            <td th:text="${itemcount.count}"></td>
+                            <td th:text="${item.username}"></td>
+                            <td th:text="${item.fullName != null ? item.fullName : ''}"></td>
+                            <td th:text="${item.email}"></td>
+                            <td th:text="${item.phone != null ? item.phone : ''}"></td>
+                            <td th:text="${item.role}"></td>
+                            <td>
+                                <span th:if="${item.status}" class="status completed">Hoạt động</span>
+                                <span th:unless="${item.status}" class="status cancelled">Khóa</span>
                             </td>
-                            <tr>
-                                <td>1</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyena@gmail.com</td>
-                                <td>0987654321</td>
-                                <td>Nam</td>
-                                <td>16/04/2025</td>
-                                <td><span class="status completed">Hoạt động</span></td>
-                                <td class="actions">
-                                    <button class="btn view-btn"><i class="fas fa-eye"></i></button>
-                                    <button class="btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyena@gmail.com</td>
-                                <td>0987654321</td>
-                                <td>Nam</td>
-                                <td>16/04/2025</td>
-                                <td><span class="status completed">Hoạt động</span></td>
-                                <td class="actions">
-                                    <button class="btn view-btn"><i class="fas fa-eye"></i></button>
-                                    <button class="btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyena@gmail.com</td>
-                                <td>0987654321</td>
-                                <td>Nam</td>
-                                <td>16/04/2025</td>
-                                <td><span class="status completed">Hoạt động</span></td>
-                                <td class="actions">
-                                    <button class="btn view-btn"><i class="fas fa-eye"></i></button>
-                                    <button class="btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyena@gmail.com</td>
-                                <td>0987654321</td>
-                                <td>Nam</td>
-                                <td>16/04/2025</td>
-                                <td><span class="status completed">Hoạt động</span></td>
-                                <td class="actions">
-                                    <button class="btn view-btn"><i class="fas fa-eye"></i></button>
-                                    <button class="btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            
+                            <td class="actions">
+                                <a th:href="@{/user/update/{id}(id=${item.id})}" class="btn edit-btn"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/user/delete/{id}(id=${item.id})}" class="btn delete-btn" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?');"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="pagination">
-                <button class="btn page-btn"><i class="fas fa-chevron-left"></i></button>
-                <button class="btn page-btn active">1</button>
-                <button class="btn page-btn">2</button>
-                <button class="btn page-btn">3</button>
-                <button class="btn page-btn"><i class="fas fa-chevron-right"></i></button>
-            </div>
+<!--            <div class="pagination">-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-left"></i></button>-->
+<!--                <button class="btn page-btn active">1</button>-->
+<!--                <button class="btn page-btn">2</button>-->
+<!--                <button class="btn page-btn">3</button>-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-right"></i></button>-->
+<!--            </div>-->
         </section>
 
-        <!-- Modal chi tiết đơn hàng -->
-        <div id="orderModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Chi tiết đơn hàng <span id="orderNumber">#ORD001</span></h2>
-                
-                <div class="order-info">
-                    <div class="info-row">
-                        <div class="info-group">
-                            <label>Khách hàng:</label>
-                            <span id="customerName">Nguyễn Văn A</span>
-                        </div>
-                        <div class="info-group">
-                            <label>Điện thoại:</label>
-                            <span id="customerPhone">0912345678</span>
-                        </div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-group">
-                            <label>Ngày đặt:</label>
-                            <span id="orderDate">16/04/2025</span>
-                        </div>
-                        <div class="info-group">
-                            <label>Nhân viên:</label>
-                            <span id="staffName">Hoàng Văn F</span>
-                        </div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-group wide">
-                            <label>Địa chỉ:</label>
-                            <span id="customerAddress">123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</span>
-                        </div>
-                    </div>
-                </div>
-
-                <h3>Danh sách sản phẩm</h3>
-                <table class="order-items">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Mã SP</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Đơn giá</th>
-                            <th>Thành tiền</th>
-                        </tr>
-                    </thead>
-                    <tbody id="orderItemsBody">
-                        <tr>
-                            <td>1</td>
-                            <td>SP001</td>
-                            <td>Sữa tươi Vinamilk 180ml</td>
-                            <td>10</td>
-                            <td>12.000 ₫</td>
-                            <td>120.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>SP002</td>
-                            <td>Mì Hảo Hảo tôm chua cay</td>
-                            <td>20</td>
-                            <td>3.500 ₫</td>
-                            <td>70.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>SP004</td>
-                            <td>Dầu ăn Neptune 1L</td>
-                            <td>2</td>
-                            <td>45.000 ₫</td>
-                            <td>90.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>SP007</td>
-                            <td>Gạo Ngọc Đỏ 5kg</td>
-                            <td>1</td>
-                            <td>120.000 ₫</td>
-                            <td>120.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>SP010</td>
-                            <td>Nước rửa chén Sunlight 400g</td>
-                            <td>1</td>
-                            <td>50.000 ₫</td>
-                            <td>50.000 ₫</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5" class="text-right"><strong>Tổng tiền hàng:</strong></td>
-                            <td>450.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-right"><strong>Giảm giá:</strong></td>
-                            <td>0 ₫</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-right"><strong>Tổng thanh toán:</strong></td>
-                            <td>450.000 ₫</td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <div class="order-actions">
-                    <div class="status-update">
-                        <label for="orderStatus">Cập nhật trạng thái:</label>
-                        <select id="orderStatus">
-                            <option value="pending">Đang xử lý</option>
-                            <option value="completed" selected>Hoàn thành</option>
-                            <option value="cancelled">Đã hủy</option>
-                        </select>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn secondary-btn" id="printOrderBtn"><i class="fas fa-print"></i> In hóa đơn</button>
-                        <button class="btn primary-btn" id="saveOrderBtn">Lưu thay đổi</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal tạo đơn hàng mới -->
-        <div id="newOrderModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Tạo người dùng mới</h2>
-                
-                <form id="newOrderForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newCustomerName">Tên khách hàng:</label>
-                            <input type="text" id="newCustomerName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newCustomerPhone">Email:</label>
-                            <input type="tel" id="newCustomerPhone" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newCustomerName">Số điện thoại:</label>
-                            <input type="text" id="newCustomerName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newCustomerPhone">Giới tính:</label>
-                            <select id="statusFilter">
-                                <option value="">Giới tính</option>
-                                <option value="pending">Nam</option>
-                                <option value="completed">Nữ</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newCustomerPhone">Trạng thái:</label>
-                            <select id="statusFilter">
-                                <option value="">Tất cả trạng thái</option>
-                                <option value="pending">Đoạt động</option>
-                                <option value="completed">Không hoạt động</option>
-                            </select>
-                        </div>      
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn secondary-btn" id="cancelNewOrderBtn">Hủy bỏ</button>
-                        <button type="submit" class="btn primary-btn">Tạo người dùng</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </main>
 
     <footer>
@@ -315,5 +91,67 @@
 
     <script src="js/user.js"></script>
     <script src="js/main.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        "paging": true,          // Bật phân trang
+        "searching": false,
+        "pageLength": 5,         // Số dòng mỗi trang
+        "lengthMenu": [5, 10, 25, 50, 100], // Các tùy chọn số dòng
+        "language": {
+          "lengthMenu": "Hiển thị _MENU_ dòng mỗi trang",
+          "zeroRecords": "Không tìm thấy dữ liệu",
+          "info": "Trang _PAGE_ trên _PAGES_",
+          "infoEmpty": "Không có dữ liệu",
+          "infoFiltered": "(lọc từ _MAX_ tổng số dòng)",
+          "search": "Tìm kiếm:",
+          "paginate": {
+            "first": "Đầu",
+            "last": "Cuối",
+            "next": ">",
+            "previous": "<"
+          }
+        }
+      });
+    });
+
+</script>
+<style>
+    .dataTables_wrapper .dataTables_paginate {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background-color: var(--white);
+      color: var(--text-color);
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background-color: var(--primary-color);
+      color: var(--white) !important;
+      border-color: var(--primary-color);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) {
+      background-color: #f1f2f6;
+    }
+
+    .dataTables_length{
+        margin-bottom: 10px;
+    }
+</style>
 </body>
 </html>

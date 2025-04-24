@@ -3,6 +3,7 @@ package com.freshland.freshland.service;
 import com.freshland.freshland.model.Product;
 import com.freshland.freshland.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public Product getProductOrNull(Integer id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAll(Sort.by(Sort.Order.desc("updatedAt")));
     }
 
     public Optional<Product> getProductById(Integer id) {
@@ -26,6 +31,13 @@ public class ProductService {
     }
 
     public Product saveProduct(Product product) {
+        if (product.getQuantity() > 10) {
+            product.setStatus("In stock");
+        } else if (product.getQuantity() <= 10 && product.getQuantity() > 0) {
+            product.setStatus("Low stock");
+        } else {
+            product.setStatus("Out of stock");
+        }
         return productRepository.save(product);
     }
 

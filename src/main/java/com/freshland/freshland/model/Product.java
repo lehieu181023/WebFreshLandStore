@@ -46,6 +46,8 @@ public class Product {
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
+
+
 }
 
 

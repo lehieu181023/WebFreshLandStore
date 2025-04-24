@@ -1,19 +1,52 @@
 package com.freshland.freshland.controller;
 
+import com.freshland.freshland.model.User;
+import com.freshland.freshland.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
 
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/user")
-    public String Index(){
+    public String Index(Model model){
+        model.addAttribute("user",userService.getAllUsers());
         return "user/user";
     }
 
-    @GetMapping("/user/update")
-    public String Update() {
+    @GetMapping("/user/create")
+    public String Create(Model model){
+        model.addAttribute("user", new User());
         return "user/update";
+    }
+
+    @GetMapping("/user/update/{id}")
+    public String Update(@PathVariable Integer id, Model model) {
+        User user = userService.getUserOrNull(id);
+        user.setPassword(null);
+        model.addAttribute("user",user);
+        return "user/update";
+    }
+
+    @PostMapping("/user/save")
+    public String Save(@ModelAttribute User user){
+        userService.saveUser(user);
+        return "redirect:/user";
+    }
+
+    @GetMapping("/user/delete/{id}")
+    public String delete(@PathVariable Integer id){
+        userService.deleteUser(id);
+        return "redirect:/user";
     }
 
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
-    <title>Quản lý đơn hàng - Freshland</title>
+    <title>Quản lý tài khoản - Freshland</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -17,48 +17,70 @@
         <div id="newOrderModal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Tạo người dùng mới</h2>
-                
-                <form id="newOrderForm">
+                <h2 th:text="${user.id != null} ? 'Sửa tài khoản' : 'Thêm tài khoản'"></h2>
+                <form id="newUserForm" th:action="@{/user/save}" th:object="${user}" method="post">
+                    <input type="hidden" name="id" th:field="*{id}">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="newCustomerName">Tên khách hàng:</label>
-                            <input type="text" id="newCustomerName" required>
+                            <label for="username">Tài khoản:</label>
+                            <input type="text" id="username" th:field="*{username}" required>
                         </div>
                         <div class="form-group">
-                            <label for="newCustomerPhone">Email:</label>
-                            <input type="tel" id="newCustomerPhone" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="newCustomerName">Số điện thoại:</label>
-                            <input type="text" id="newCustomerName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newCustomerPhone">Giới tính:</label>
-                            <select id="statusFilter">
-                                <option value="">Giới tính</option>
-                                <option value="pending">Nam</option>
-                                <option value="completed">Nữ</option>
-                            </select>
-                        </div>
-                    </div>
+                            <label for="pass">Mật khẩu:</label>
+                            <input th:if="${user.id != null}" type="password"
+                                   id="pass"
+                                   th:field="*{password}"
+                                   placeholder="Nhập mật khẩu"
+                                   class="form-control"
 
+                            />
+                            <input th:unless="${user.id != null}" type="password"
+                                   id="pass"
+                                   th:field="*{password}"
+                                   placeholder="Nhập mật khẩu"
+                                   class="form-control"
+                                   required
+                            />
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="newCustomerPhone">Trạng thái:</label>
-                            <select id="statusFilter">
-                                <option value="">Tất cả trạng thái</option>
-                                <option value="pending">Đoạt động</option>
-                                <option value="completed">Không hoạt động</option>
+                            <label for="role">Quyền:</label>
+                            <select id="role" th:field="*{role}" required>
+                                <option value="">Chọn quyền</option>
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="STAFF">STAFF</option>
                             </select>
-                        </div>      
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullname">Tên đầy đủ:</label>
+                            <input type="text" id="fullname" th:field="*{fullName}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="tel" id="email" th:field="*{email}" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="text" id="phone" th:field="*{phone}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Trạng thái:</label>
+                            <select id="status" th:field="*{status}">
+                                <option value="">Chọn trạng thái</option>
+                                <option value="1">Hoạt động</option>
+                                <option value="0">Khóa</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn secondary-btn" id="cancelNewOrderBtn">Hủy bỏ</button>
-                        <button type="submit" class="btn primary-btn">Tạo người dùng</button>
+                        <a th:href="@{/user}" type="button" class="btn secondary-btn" id="cancelNewOrderBtn">Hủy bỏ</a>
+                        <button type="submit" class="btn primary-btn">Lưu</button>
                     </div>
                 </form>
             </div>

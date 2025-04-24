@@ -18,28 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Xử lý đăng nhập
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Lấy giá trị từ form
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
-            
-            // Kiểm tra các trường đã được nhập chưa
-            if (!username || !password) {
-                showError('Vui lòng nhập đầy đủ thông tin đăng nhập');
-                return;
-            }
-            
-            // Trong thực tế, đây sẽ là API call đến server để xác thực
-            // Nhưng trong demo này, chúng ta sẽ kiểm tra với dữ liệu mẫu
-            attemptLogin(username, password, remember);
-        });
-    }
+
 
     // Xử lý quên mật khẩu
     const forgotPasswordLink = document.querySelector('.forgot-password');
@@ -62,15 +41,15 @@ function attemptLogin(username, password, remember) {
         { username: 'staff', password: 'staff', role: 'staff' },
         { username: 'manager', password: 'manager123', role: 'manager' }
     ];
-    
+
     // Tìm tài khoản khớp với thông tin đăng nhập
-    const user = demoUsers.find(user => 
+    const user = demoUsers.find(user =>
         user.username === username && user.password === password);
-    
+
     if (user) {
         // Đăng nhập thành công
         showSuccess();
-        
+
         // Lưu thông tin đăng nhập nếu chọn "Ghi nhớ đăng nhập"
         if (remember) {
             saveLoginInfo(username, user.role);
@@ -78,7 +57,7 @@ function attemptLogin(username, password, remember) {
             // Xóa thông tin đăng nhập đã lưu trước đó (nếu có)
             clearSavedLogin();
         }
-        
+
         // Chuyển hướng đến trang chủ sau 1 giây
         setTimeout(function() {
             window.location.href = 'index.html';
@@ -86,10 +65,10 @@ function attemptLogin(username, password, remember) {
     } else {
         // Đăng nhập thất bại
         showError('Tên đăng nhập hoặc mật khẩu không chính xác');
-        
+
         // Xóa mật khẩu đã nhập
         document.getElementById('password').value = '';
-        
+
         // Focus vào trường mật khẩu
         document.getElementById('password').focus();
     }
