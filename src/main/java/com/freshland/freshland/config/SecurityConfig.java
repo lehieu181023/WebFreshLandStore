@@ -25,6 +25,9 @@ public class SecurityConfig {
                         .requestMatchers("/staff/**").hasAnyRole("STAFF", "ADMIN")
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedPage("/login?noaccess=true")  // Trang hiển thị khi không có quyền
+                )
                 .formLogin(form -> form
                         .loginPage("/login") // đường dẫn đến login.html của bạn
                         .loginProcessingUrl("/login") // nơi form submit tới

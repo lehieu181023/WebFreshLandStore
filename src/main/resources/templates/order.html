@@ -251,6 +251,7 @@
             <!-- Giỏ hàng (bên phải) -->
             <div class="top-products">
                 <h2>Giỏ hàng</h2>
+                <form th:action="@{/CreateOrder}" method="post">
                 <div id="cartItems">
                     <!-- Sản phẩm trong giỏ hàng sẽ được thêm bằng JavaScript -->
                     <div class="empty-cart">
@@ -259,7 +260,8 @@
                         <p>Vui lòng chọn sản phẩm từ danh sách</p>
                     </div>
                 </div>
-                
+                    <button type="submit" id="btn-submit-order" hidden="hidden"></button>
+                </form>
                 <div class="total-section">
                     <div class="total-row">
                         <span>Tổng tiền hàng:</span>

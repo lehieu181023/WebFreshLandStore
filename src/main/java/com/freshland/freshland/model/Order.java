@@ -2,6 +2,7 @@ package com.freshland.freshland.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class Order {
 
     @Column(name = "order_date", nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime orderDate;
 
     @Column(name = "total_amount", nullable = false, precision = 38, scale = 2)

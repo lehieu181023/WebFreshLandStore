@@ -23,6 +23,10 @@ public class OrderItem {
     @Column(name = "product_id")
     private Integer productId;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id",insertable = false,updatable = false)
+    private Product product;
+
     @Column(nullable = false)
     private Integer quantity;
 

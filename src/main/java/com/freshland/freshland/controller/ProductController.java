@@ -5,6 +5,7 @@ import com.freshland.freshland.service.CategoryService;
 import com.freshland.freshland.service.FileService;
 import com.freshland.freshland.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +32,16 @@ public class ProductController {
         this.fileService = fileService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/product")
     public String Index(Model model){
         model.addAttribute("product", productService.getAllProducts());
         model.addAttribute("category", categoryService.getAllCategory());
         return "product/products";
     }
+
     @PostMapping("/GetProduct")
+    @ResponseBody
     public Map<String, List<?>> product(){
         Map<String,List<?>> result = new HashMap<>();
         result.put("product", productService.getAllProducts());
@@ -45,6 +49,7 @@ public class ProductController {
         return result;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/product/update")
     public String Create(Model model) {
         model.addAttribute("product", new Product());
@@ -52,6 +57,7 @@ public class ProductController {
         return "product/update";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/product/update/{id}")
     public String updateProduct(@PathVariable Integer id, Model model) {
         model.addAttribute("product", productService.getProductOrNull(id));
@@ -59,12 +65,14 @@ public class ProductController {
         return "product/update";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);
         return "redirect:/product";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/SaveProduct")
     public String saveProduct(@ModelAttribute Product product,
                               @RequestParam("imageFile") MultipartFile imageFile) {
@@ -79,11 +87,12 @@ public class ProductController {
         return "redirect:/product";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/category/{categoryId}")
     public String getByCategory(@PathVariable Integer categoryId, Model model) {
         List<Product> products = productService.getProductsByCategoryId(categoryId);
         model.addAttribute("products", products);
-        return "products"; // Trả về trang products.html
+        return "products";
     }
 
 

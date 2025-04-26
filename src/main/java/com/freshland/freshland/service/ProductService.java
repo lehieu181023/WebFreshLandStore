@@ -1,5 +1,6 @@
 package com.freshland.freshland.service;
 
+import com.freshland.freshland.dot.ProductSalesInfo;
 import com.freshland.freshland.model.Product;
 import com.freshland.freshland.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class ProductService {
 
     public List<Product> getProductsByCategoryIdAndStatus(Integer categoryId, String status) {
         return productRepository.findByCategoryIdAndStatus(categoryId, status);
+    }
+
+    public Long countproduct(){
+        return productRepository.count();
+    }
+
+    public Long countLowStock(){
+        return productRepository.countByStatus("Low stock");
+    }
+
+    public List<ProductSalesInfo> TopSeller(){
+        return productRepository.findTop10BestSellingProductsWithSales();
     }
 
 }

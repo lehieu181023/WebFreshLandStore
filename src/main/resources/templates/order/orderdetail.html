@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng - Freshland</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Import fragment header từ file header.html trong thư mục fragments -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <main>
+        <section class="order-management">
+            <div class="section-header">
+                <h2>Chi tiết đơn hàng</h2>
+            </div>
+        </section>
+        <!-- Modal chi tiết đơn hàng -->
+        <div id="orderModal" class="showmodal" th:object="${order}">
+            <div class="modal-content">
+
+                <h2>Chi tiết đơn hàng <span id="orderNumber" th:text="*{id}"></span></h2>
+                
+                <div class="order-info">
+
+                    <div class="info-row">
+                        <div class="info-group">
+                            <label>Ngày đặt:</label>
+                            <span id="orderDate" th:text="*{orderDate}"></span>
+                        </div>
+                        <div class="info-group">
+                            <label>Nhân viên:</label>
+                            <span id="staffName" th:text="*{user.fullName}"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <h3>Danh sách sản phẩm</h3>
+                <table class="order-items">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã SP</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderItemsBody">
+                        <tr th:each="item,itemstart:*{orderItem}">
+                            <td th:text="${itemstart.count}"></td>
+                            <td th:text="${item.productId}"></td>
+                            <td th:text="${item.product.name}"></td>
+                            <td th:text="${item.quantity}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                            <td th:text="${#numbers.formatDecimal((item.price * item.quantity), 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Tổng tiền hàng:</strong></td>
+                            <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Giảm giá:</strong></td>
+                            <td>0 ₫</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Tổng thanh toán:</strong></td>
+                            <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="order-actions">
+                    <div class="action-buttons">
+                        <a class="btn secondary-btn" th:href="@{/printorder/{id}(id = ${order.id})}"><i class="fas fa-print"></i> In hóa đơn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Freshland. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="js/listorders.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

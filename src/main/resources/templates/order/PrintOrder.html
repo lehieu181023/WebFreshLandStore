@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng #ORD001 - Freshland</title>
+    <style>
+        @page {
+            size: portrait;
+            margin: 10mm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            color: #2ecc71;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .company-info {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th {
+            background-color: #f3f3f3;
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .total-section {
+            border-top: 2px solid #ddd;
+            margin-top: 5px;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .thank-you {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" th:object="${order}">
+        <div class="header">
+            <div class="logo">Freshland</div>
+            <div class="company-info">Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hà Nội</div>
+            <div class="company-info">Hotline: 1900 1234 | Email: support@freshland.vn</div>
+        </div>
+        
+        <h1 th:text="'HÓA ĐƠN ĐƠN HÀNG #' + *{id}"></h1>
+        
+        <div class="order-info">
+            <div>
+                <div><strong>Ngày đặt:</strong> <span th:text="*{orderDate}"></span></div>
+            </div>
+            <div>
+                <div><strong>Nhân viên:</strong> <span th:text="*{user.fullName}"></span> </div>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã SP</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item,itemstart:*{orderItem}">
+                    <td th:text="${itemstart.count}"></td>
+                    <td th:text="${item.productId}"></td>
+                    <td th:text="${item.product.name}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal((item.price * item.quantity), 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                </tr>
+            </tbody>
+            <tfoot class="total-section">
+                <tr>
+                    <td colspan="5" class="text-right">Tổng tiền hàng:</td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-right">Giảm giá:</td>
+                    <td class="text-right">0 đ</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="5" class="text-right">Tổng thanh toán:</td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div class="footer">
+            <p class="thank-you">Cảm ơn quý khách đã mua sắm tại Freshland!</p>
+            <p>Mong được phục vụ quý khách trong lần tiếp theo.</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto print when page loads
+        window.onload = function() {
+            // Small timeout to ensure the page is fully rendered
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+
+        // Listen for print dialog close or cancel
+        window.addEventListener('afterprint', function() {
+            window.location.href = '[[${UrlReferer}]]';
+        });
+        
+        // Also handle Escape key (for print cancel) and other ways to exit
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = '[[${UrlReferer}]]';
+            }
+        });
+        
+        // Fallback for browsers that don't support afterprint
+        setTimeout(function() {
+            window.location.href = '[[${UrlReferer}]]';
+        }, 60000); // Redirect after 1 minute if nothing else works
+    </script>
+</body>
+</html>

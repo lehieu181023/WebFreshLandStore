@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{img/logo.png}">
+    <title>Quản lý đơn hàng - Freshland</title>
+    <link rel="stylesheet" th:href="@{css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+<body>
+<!-- Import fragment header từ file header.html trong thư mục fragments -->
+<div th:replace="fragments/header :: header"></div>
+
+    <main>
+        <section class="order-management">
+            <div class="section-header">
+                <h2>Quản lý đơn hàng</h2>
+            </div>
+
+<!--            <div class="filters">-->
+<!--                <div class="search-box">-->
+<!--                    <input type="text" id="searchOrder" placeholder="Tìm kiếm đơn hàng...">-->
+<!--                    <button class="search-btn"><i class="fas fa-search"></i></button>-->
+<!--                </div>-->
+<!--                <div class="filter-container">-->
+<!--                    <div class="date-range">-->
+<!--                        <label for="startDate">Từ:</label>-->
+<!--                        <input type="date" id="startDate">-->
+<!--                        <label for="endDate">Đến:</label>-->
+<!--                        <input type="date" id="endDate">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="order-list">
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã đơn</th>
+                            <th>Nhân viên</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                        <tr th:each="item,itemcount:${order}">
+                            <td th:text="${itemcount.count}"></td>
+                            <td th:text="'#'+ ${item.id}"></td>
+                            <td th:text="${item.user.fullName}"></td>
+                            <td th:text="${item.orderDate}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                            <td><span class="status completed">Hoàn thành</span></td>
+                            <td class="actions">
+                                <a th:href="@{/orderdetail/{id}(id=${item.id})}" class="btn view-btn"><i class="fas fa-eye"></i></a>
+                                <a th:href="@{/printorder/{id}(id=${item.id})}" class="btn print-btn"><i class="fas fa-print"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<!--            <div class="pagination">-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-left"></i></button>-->
+<!--                <button class="btn page-btn active">1</button>-->
+<!--                <button class="btn page-btn">2</button>-->
+<!--                <button class="btn page-btn">3</button>-->
+<!--                <button class="btn page-btn"><i class="fas fa-chevron-right"></i></button>-->
+<!--            </div>-->
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Freshland. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script src="js/listorders.js"></script>
+    <script src="js/main.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        "paging": true,          // Bật phân trang
+        "searching": false,
+        "pageLength": 5,         // Số dòng mỗi trang
+        "lengthMenu": [5, 10, 25, 50, 100], // Các tùy chọn số dòng
+        "language": {
+          "lengthMenu": "Hiển thị _MENU_ dòng mỗi trang",
+          "zeroRecords": "Không tìm thấy dữ liệu",
+          "info": "Trang _PAGE_ trên _PAGES_",
+          "infoEmpty": "Không có dữ liệu",
+          "infoFiltered": "(lọc từ _MAX_ tổng số dòng)",
+          "search": "Tìm kiếm:",
+          "paginate": {
+            "first": "Đầu",
+            "last": "Cuối",
+            "next": ">",
+            "previous": "<"
+          }
+        }
+      });
+    });
+
+</script>
+<style>
+    .dataTables_wrapper .dataTables_paginate {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background-color: var(--white);
+      color: var(--text-color);
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background-color: var(--primary-color);
+      color: var(--white) !important;
+      border-color: var(--primary-color);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) {
+      background-color: #f1f2f6;
+    }
+
+    .dataTables_length{
+        margin-bottom: 10px;
+    }
+</style>
+</body>
+</html>
