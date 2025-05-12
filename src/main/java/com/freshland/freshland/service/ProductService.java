@@ -2,10 +2,13 @@ package com.freshland.freshland.service;
 
 import com.freshland.freshland.dot.ProductSalesInfo;
 import com.freshland.freshland.model.Product;
+import com.freshland.freshland.repository.OrderItemRepository;
 import com.freshland.freshland.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,10 +16,12 @@ import java.util.Optional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public Product getProductOrNull(Integer id) {
@@ -42,7 +47,9 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public void deleteProduct(Integer id) {
+        orderItemRepository.deleteByProductId(id);
         productRepository.deleteById(id);
     }
     public List<Product> getProductsByCategoryId(Integer categoryId) {
