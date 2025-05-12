@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -44,4 +45,7 @@ public class User {
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
+
+    @OneToMany (mappedBy = "userId",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Order> orders;
 }

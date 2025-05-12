@@ -42,7 +42,7 @@ public class Order {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "orderId",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderId",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrderItem> orderItem;
 }
 

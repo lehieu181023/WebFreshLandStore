@@ -1,6 +1,8 @@
 package com.freshland.freshland.service;
 
 import com.freshland.freshland.model.User;
+import com.freshland.freshland.repository.OrderItemRepository;
+import com.freshland.freshland.repository.OrderRepository;
 import com.freshland.freshland.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,14 +15,18 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository) {
+        this.userRepository = userRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.orderRepository = orderRepository;
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -61,6 +67,7 @@ public class UserService {
 
 
     public void deleteUser(Integer id) {
+
         userRepository.deleteById(id);
     }
 
