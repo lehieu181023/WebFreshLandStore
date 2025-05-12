@@ -15,14 +15,9 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository, OrderItemRepository orderItemRepository, OrderRepository orderRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.orderRepository = orderRepository;
     }
 
     @Autowired
