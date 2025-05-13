@@ -17,7 +17,7 @@ public class HomeController {
         this.productService = productService;
         this.orderService = orderService;
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/home")
     public String Index(Model model){
         model.addAttribute("countProduct",productService.countproduct());
